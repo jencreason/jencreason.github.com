@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H4 SCARECROW Status Screen</title>
+    <style>
+        /* CSS styles for the page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s ease; /* Smooth color transition */
+            font-family: arial;
+            color: white;
+            flex-direction: column;
+        }
+
+        .status-container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.2); /* Slight overlay for readability */
+        }
+
+        #status-text {
+            font-size: 5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #countdown-timer {
+            font-size: 3em;
+            opacity: 0.8;
+        }
+
+        /* Define colors as CSS variables for easy application */
+        .color-blue { --bg-color: #000080; } /* Closed */
+        .color-green { --bg-color: #006400; } /* Open */
+        .color-red { --bg-color: #8B0000; } /* On Break */
+        .color-purple { --bg-color: #4B0082; } /* On Dinner Break */
+    </style>
+</head>
+<body class="color-blue">
+    <div class="status-container">
+        <div id="status-text">Checking Status...</div>
+        <div id="countdown-timer"></div>
+    </div>
+
+    <script>
+        // Define the operating schedule in 24-hour format
+        // Times are in minutes from midnight (e.g., 2:45 PM is 14*60 + 45 = 885 minutes)
+        // Times are inclusive of the start time, exclusive of the end time for these rules.
+        const schedule = [
+            // Define "Open" blocks (Green)
+            { start: 885, end: 930, status: "H4 OPEN", colorClass: "color-green" }, // 2:45 - 3:30 PM
+            { start: 945, end: 990, status: "H4 OPEN", colorClass: "color-green" }, // 3:45 - 4:30 PM
+            { start: 1035, end: 1080, status: "H4 OPEN", colorClass: "color-green" }, // 5:15 - 6:00 PM
+            { start: 1095, end: 1140, status: "H4 OPEN", colorClass: "color-green" }, // 6:15 - 7:00 PM
+            { start: 1155, end: 1200, status: "H4 OPEN", colorClass: "color-green" }, // 7:15 - 8:00 PM
+            { start: 1215, end: 1260, status: "H4 OPEN", colorClass: "color-green" }, // 8:15 - 9:00 PM
+            { start: 1275, end: 1320, status: "H4 OPEN", colorClass: "color-green" }, // 9:15 - 10:00 PM
+
+            // Define "On Break" blocks (Red)
+            { start: 930, end: 945, status: "H4 ON BREAK", colorClass: "color-red" }, // 3:30 - 3:45 PM
+            { start: 1080, end: 1095, status: "H4 ON BREAK", colorClass: "color-red" }, // 6:00 - 6:15 PM
+            { start: 1140, end: 1155, status: "H4 ON BREAK", colorClass: "color-red" }, // 7:00 - 7:15 PM
+            { start: 1200, end: 1215, status: "H4 ON BREAK", colorClass: "color-red" }, // 8:00 - 8:15 PM
+            { start: 1260, end: 1275, status: "H4 ON BREAK", colorClass: "color-red" }, // 9:00 - 9:15 PM
+
+            // Define "On Dinner Break" block (Purple)
+            { start: 990, end: 1035, status: "H4 ON DINNER BREAK", colorClass: "color-purple" }, // 4:30 - 5:15 PM
+        ];
+        
+        // Define the default 'CLOSED' status parameters
+        const defaultClosed = { status: "H4 CLOSED", colorClass: "color-blue" };
+        const dailyOpenStartMinute = 885; // 2:45 PM
+        const dailyCloseEndMinute = 1320; // 10:00 PM
+
+        function updateStatus() {
+            const now = new Date();
+            // Get the time in minutes from midnight for easy comparison
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+
+            let currentStatus = defaultClosed;
+            let nextChangeTime = new Date(now);
+
+            // 1. Check if the current time falls within any defined schedule slot
+            for (const slot of schedule) {
+                if (currentTimeMinutes >= slot.start && currentTimeMinutes < slot.end) {
+                    currentStatus = slot;
+                    // Calculate the exact timestamp for the end of the current slot
+                    const endHours = Math.floor(slot.end / 60);
+                    const endMinutes = slot.end % 60;
+                    nextChangeTime.setHours(endHours, endMinutes, 0, 0);
+                    break;
+                }
+            }
+
+            // 2. If it's the default 'CLOSED' status, calculate the next time it opens/changes
+            if (currentStatus.status === defaultClosed.status) {
+                if (currentTimeMinutes < dailyOpenStartMinute) {
+                    // Before opening time today, next change is opening today
+                    nextChangeTime.setHours(Math.floor(dailyOpenStartMinute / 60), dailyOpenStartMinute % 60, 0, 0);
+                } else {
+                    // After closing time today, next change is opening tomorrow
+                    nextChangeTime.setDate(now.getDate() + 1);
+                    nextChangeTime.setHours(Math.floor(dailyOpenStartMinute / 60), dailyOpenStartMinute % 60, 0, 0);
+                }
+            }
+
+            applyStyle(currentStatus.status, currentStatus.colorClass);
+            startCountdown(nextChangeTime);
+        }
+
+        function applyStyle(statusText, colorClass) {
+            document.body.className = colorClass;
+            // Apply the CSS variable to the body for the transition effect
+            document.body.style.backgroundColor = `var(--bg-color)`;
+            document.getElementById('status-text').textContent = statusText;
+        }
+
+        function startCountdown(endTime) {
+            const timerElement = document.getElementById('countdown-timer');
+            // Clear any previous intervals if updateStatus is called multiple times
+            if (window.countdownInterval) {
+                clearInterval(window.countdownInterval);
+            }
+
+            function updateCountdown() {
+                const now = new Date();
+                let timeDifference = endTime - now;
+
+                if (timeDifference <= 0) {
+                    clearInterval(window.countdownInterval);
+                    timerElement.textContent = "Status is updating now, please wait...";
+                    // Recalculate everything when the timer hits zero
+                    setTimeout(updateStatus, 1000); // Give it a second before updating
+                    return;
+                }
+
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                const formatTime = value => value < 10 ? `0${value}` : value;
+
+                timerElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} left`;
+            }
+
+            // Update countdown every second
+            window.countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown(); // Call immediately to avoid a 1-second delay
+        }
+
+        // Initialize the script when the page loads
+        updateStatus();
+    </script>
+</body>
+</html>
