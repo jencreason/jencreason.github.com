@@ -55,23 +55,21 @@
         // Times are inclusive of the start time, exclusive of the end time for these rules.
         const schedule = [
             // Define "Open" blocks (Green)
-            { start: 870, end: 915, status: "H3 OPEN", color: "green" }, // 2:30 - 3:15
-            { start: 930, end: 975, status: "H3 OPEN", color: "green" }, // 3:30 - 4:15
             { start: 990, end: 1035, status: "H3 OPEN", color: "green" }, // 4:30 - 5:15
-            { start: 1080, end: 1125, status: "H3 OPEN", color: "green" }, // 6:00 - 6:45
-            { start: 1140, end: 1185, status: "H3 OPEN", color: "green" }, // 7:00 - 7:45
+            { start: 1050, end: 1095, status: "H3 OPEN", color: "green" }, // 5:30 - 6:15
+            { start: 1110, end: 1155, status: "H3 OPEN", color: "green" }, // 6:30 - 7:15
             { start: 1200, end: 1245, status: "H3 OPEN", color: "green" }, // 8:00 - 8:45
             { start: 1260, end: 1305, status: "H3 OPEN", color: "green" }, // 9:00 - 9:45
+            { start: 1320, end: 1365, status: "H3 OPEN", color: "green" }, // 10:00 - 10:45
 
             // Define "On Break" blocks (Red)
-            { start: 915, end: 930, status: "H3 ON BREAK", color: "red" }, // 3:15 - 3:30
-            { start: 975, end: 990, status: "H3 ON BREAK", color: "red" }, // 4:15 - 4:30
-            { start: 1125, end: 1140, status: "H3 ON BREAK", color: "red" }, // 6:45 - 7:00
-            { start: 1185, end: 1200, status: "H3 ON BREAK", color: "red" }, // 7:45 - 8:00
+            { start: 1035, end: 1050, status: "H3 ON BREAK", color: "red" }, // 5:15 - 6:30
+            { start: 1095, end: 1110, status: "H3 ON BREAK", color: "red" }, // 6:15 - 6:30
             { start: 1245, end: 1260, status: "H3 ON BREAK", color: "red" }, // 8:45 - 9:00
+            { start: 1305, end: 1320, status: "H3 ON BREAK", color: "red" }, // 9:45 - 10:00
 
             // Define "On Dinner Break" block (Purple)
-            { start: 1035, end: 1080, status: "H3 ON DINNER BREAK", color: "purple" }, // 5:15 - 6:00
+            { start: 1155, end: 1200, status: "H3 ON DINNER BREAK", color: "purple" }, // 7:15 - 8:00
         ];
 
         function updateStatus() {
@@ -81,8 +79,8 @@
 
             let currentStatus = { status: "H3 CLOSED", color: "blue" };
             let nextChangeTime = new Date(now);
-            const openTimeStartToday = 870; // 2:30 PM
-            const closeTimeEndToday = 1305; // 9:45 PM
+            const openTimeStartToday = 990; // 4:30 PM
+            const closeTimeEndToday = 1365; // 10:45 PM
 
             // 1. Check if we are within any specific scheduled time slot
             for (const slot of schedule) {
@@ -99,12 +97,12 @@
             // 2. If we are "H3 CLOSED" (default status is maintained), find the next boundary
             if (currentStatus.status === "H3 CLOSED") {
                 if (currentTimeMinutes < openTimeStartToday) {
-                    // It is before 2:30 PM today, next change is 2:30 PM today
-                    nextChangeTime.setHours(14, 30, 0, 0);
+                    // It is before 4:30 PM today, next change is 4:30 PM today
+                    nextChangeTime.setHours(16, 30, 0, 0);
                 } else if (currentTimeMinutes >= closeTimeEndToday) {
-                    // It is after 9:45 PM today, next change is 2:30 PM tomorrow
+                    // It is after 10:55 PM today, next change is 4:30 PM tomorrow
                     nextChangeTime.setDate(now.getDate() + 1);
-                    nextChangeTime.setHours(14, 30, 0, 0);
+                    nextChangeTime.setHours(16, 30, 0, 0);
                 }
             }
 

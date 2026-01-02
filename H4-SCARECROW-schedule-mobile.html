@@ -56,29 +56,29 @@
         // Times are inclusive of the start time, exclusive of the end time for these rules.
         const schedule = [
             // Define "Open" blocks (Green)
-            { start: 885, end: 930, status: "H4 OPEN", colorClass: "color-green" }, // 2:45 - 3:30 PM
-            { start: 945, end: 990, status: "H4 OPEN", colorClass: "color-green" }, // 3:45 - 4:30 PM
-            { start: 1035, end: 1080, status: "H4 OPEN", colorClass: "color-green" }, // 5:15 - 6:00 PM
-            { start: 1095, end: 1140, status: "H4 OPEN", colorClass: "color-green" }, // 6:15 - 7:00 PM
+            { start: 960, end: 990, status: "H4 OPEN", colorClass: "color-green" }, // 4:00 - 4:30 PM
+            { start: 1005, end: 1050, status: "H4 OPEN", colorClass: "color-green" }, // 4:45 - 5:30 PM
+            { start: 1065, end: 1110, status: "H4 OPEN", colorClass: "color-green" }, // 5:45 - 6:30 PM
             { start: 1155, end: 1200, status: "H4 OPEN", colorClass: "color-green" }, // 7:15 - 8:00 PM
             { start: 1215, end: 1260, status: "H4 OPEN", colorClass: "color-green" }, // 8:15 - 9:00 PM
             { start: 1275, end: 1320, status: "H4 OPEN", colorClass: "color-green" }, // 9:15 - 10:00 PM
+            { start: 1335, end: 1375, status: "H4 OPEN", colorClass: "color-green" }, // 10:15 - 10:55 PM
 
             // Define "On Break" blocks (Red)
-            { start: 930, end: 945, status: "H4 ON BREAK", colorClass: "color-red" }, // 3:30 - 3:45 PM
-            { start: 1080, end: 1095, status: "H4 ON BREAK", colorClass: "color-red" }, // 6:00 - 6:15 PM
-            { start: 1140, end: 1155, status: "H4 ON BREAK", colorClass: "color-red" }, // 7:00 - 7:15 PM
+            { start: 990, end: 1005, status: "H4 ON BREAK", colorClass: "color-red" }, // 4:30 - 4:45 PM
+            { start: 1050, end: 1065, status: "H4 ON BREAK", colorClass: "color-red" }, // 5:30 - 5:45 PM
             { start: 1200, end: 1215, status: "H4 ON BREAK", colorClass: "color-red" }, // 8:00 - 8:15 PM
             { start: 1260, end: 1275, status: "H4 ON BREAK", colorClass: "color-red" }, // 9:00 - 9:15 PM
+            { start: 1320, end: 1335, status: "H4 ON BREAK", colorClass: "color-red" }, // 10:00 - 10:15 PM
 
             // Define "On Dinner Break" block (Purple)
-            { start: 990, end: 1035, status: "H4 ON DINNER BREAK", colorClass: "color-purple" }, // 4:30 - 5:15 PM
+            { start: 1110, end: 1155, status: "H4 ON DINNER BREAK", colorClass: "color-purple" }, // 6:30 - 7:15 PM
         ];
         
         // Define the default 'CLOSED' status parameters
         const defaultClosed = { status: "H4 CLOSED", colorClass: "color-blue" };
-        const dailyOpenStartMinute = 885; // 2:45 PM
-        const dailyCloseEndMinute = 1320; // 10:00 PM
+        const dailyOpenStartMinute = 960; // 4:00 PM
+        const dailyCloseEndMinute = 1375; // 10:55 PM
 
         function updateStatus() {
             const now = new Date();
