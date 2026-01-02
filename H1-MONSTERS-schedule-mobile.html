@@ -56,29 +56,30 @@
         // Times are inclusive of the start time, exclusive of the end time for these rules.
         const schedule = [
             // Define "Open" blocks (Green)
-            { start: 900, end: 945, status: "H1 OPEN", colorClass: "color-green" }, // 3:00 - 3:45 PM
-            { start: 960, end: 1005, status: "H1 OPEN", colorClass: "color-green" }, // 4:00 - 4:45 PM
-            { start: 1020, end: 1065, status: "H1 OPEN", colorClass: "color-green" }, // 5:00 - 5:45 PM
-            { start: 1110, end: 1155, status: "H1 OPEN", colorClass: "color-green" }, // 6:30 - 7:15 PM
-            { start: 1170, end: 1215, status: "H1 OPEN", colorClass: "color-green" }, // 7:30 - 8:15 PM
-            { start: 1230, end: 1275, status: "H1 OPEN", colorClass: "color-green" }, // 8:30 - 9:15 PM
-            { start: 1290, end: 1335, status: "H1 OPEN", colorClass: "color-green" }, // 9:30 - 10:15 PM
+            { start: 975, end: 1020, status: "H1 OPEN", colorClass: "color-green" }, // 4:15 - 5:00 PM
+            { start: 1065, end: 1110, status: "H1 OPEN", colorClass: "color-green" }, // 5:45 - 6:30 PM
+            { start: 1125, end: 1170, status: "H1 OPEN", colorClass: "color-green" }, // 6:45 - 7:30 PM
+            { start: 1185, end: 1230, status: "H1 OPEN", colorClass: "color-green" }, // 7:45 - 8:30 PM
+            { start: 1245, end: 1290, status: "H1 OPEN", colorClass: "color-green" }, // 8:45 - 9:30 PM
+            { start: 1305, end: 1335, status: "H1 OPEN", colorClass: "color-green" }, // 9:45 - 10:15 PM
+            { start: 1350, end: 1375, status: "H1 OPEN", colorClass: "color-green" }, // 10:30 - 10:55 PM
 
-            // Define "H1 ON BREAK" blocks (Red)
-            { start: 945, end: 960, status: "H1 ON BREAK", colorClass: "color-red" }, // 3:45 - 4:00 PM
-            { start: 1005, end: 1020, status: "H1 ON BREAK", colorClass: "color-red" }, // 4:45 - 5:00 PM
-            { start: 1155, end: 1170, status: "H1 ON BREAK", colorClass: "color-red" }, // 7:15 - 7:30 PM
-            { start: 1215, end: 1230, status: "H1 ON BREAK", colorClass: "color-red" }, // 8:15 - 8:30 PM
-            { start: 1275, end: 1290, status: "H1 ON BREAK", colorClass: "color-red" }, // 9:15 - 9:30 PM
+            // Define "On Break" blocks (Red)
+            { start: 1110, end: 1125, status: "H1 ON BREAK", colorClass: "color-red" }, // 6:30 - 6:45 PM
+            { start: 1170, end: 1185, status: "H1 ON BREAK", colorClass: "color-red" }, // 7:30 - 7:45 PM
+            { start: 1230, end: 1245, status: "H1 ON BREAK", colorClass: "color-red" }, // 8:30 - 8:45 PM
+            { start: 1290, end: 1305, status: "H1 ON BREAK", colorClass: "color-red" }, // 9:30 - 9:45 PM
+            { start: 1335, end: 1350, status: "H1 ON BREAK", colorClass: "color-red" }, // 10:15 - 10:30 PM
 
             // Define "On Dinner Break" block (Purple)
-            { start: 1065, end: 1110, status: "H1 ON DINNER BREAK", colorClass: "color-purple" }, // 5:45 - 6:30 PM
+            { start: 1020, end: 1065, status: "H1 ON DINNER BREAK", colorClass: "color-purple" }, // 5:00 - 5:45 PM
         ];
+
         
-        // Define the default 'H1 CLOSED' status parameters
+        // Define the default 'CLOSED' status parameters
         const defaultClosed = { status: "H1 CLOSED", colorClass: "color-blue" };
-        const dailyOpenStartMinute = 900; // 3:00 PM
-        const dailyCloseEndMinute = 1335; // 10:15 PM
+        const dailyOpenStartMinute = 975; // 4:15 PM
+        const dailyCloseEndMinute = 1375; // 10:55 PM
 
         function updateStatus() {
             const now = new Date();
