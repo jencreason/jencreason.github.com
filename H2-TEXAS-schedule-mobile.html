@@ -55,23 +55,23 @@
         // Times are inclusive of the start time, exclusive of the end time for these rules.
         const schedule = [
             // Define "Open" blocks (Green)
-            { start: 855, end: 900, status: "H2 OPEN", color: "green" }, // 2:15 - 3:00
-            { start: 915, end: 960, status: "H2 OPEN", color: "green" }, // 3:15 - 4:00
-            { start: 1005, end: 1050, status: "H2 OPEN", color: "green" }, // 4:45 - 5:30
-            { start: 1065, end: 1110, status: "H2 OPEN", color: "green" }, // 5:45 - 6:30
-            { start: 1125, end: 1170, status: "H2 OPEN", color: "green" }, // 6:45 - 7:30
-            { start: 1185, end: 1230, status: "H2 OPEN", color: "green" }, // 7:45 - 8:30
-            { start: 1245, end: 1290, status: "H2 OPEN", color: "green" }, // 8:45 - 9:30
+            { start: 960, end: 1005, status: "H2 OPEN", color: "green" }, // 4:00 - 4:45
+            { start: 1020, end: 1065, status: "H2 OPEN", color: "green" }, // 5:00 - 5:45
+            { start: 1110, end: 1155, status: "H2 OPEN", color: "green" }, // 6:30 - 7:15
+            { start: 1170, end: 1215, status: "H2 OPEN", color: "green" }, // 7:30 - 8:15
+            { start: 1230, end: 1275, status: "H2 OPEN", color: "green" }, // 8:30 - 9:15
+            { start: 1290, end: 1320, status: "H2 OPEN", color: "green" }, // 9:30 - 10:00
+            { start: 1335, end: 1375, status: "H2 OPEN", color: "green" }, // 10:15 - 10:55
 
             // Define "On Break" blocks (Red)
-            { start: 900, end: 915, status: "H2 ON BREAK", color: "red" }, // 3:00 - 3:15
-            { start: 1050, end: 1065, status: "H2 ON BREAK", color: "red" }, // 5:30 - 5:45
-            { start: 1110, end: 1125, status: "H2 ON BREAK", color: "red" }, // 6:30 - 6:45
-            { start: 1170, end: 1185, status: "H2 ON BREAK", color: "red" }, // 7:30 - 7:45
-            { start: 1230, end: 1245, status: "H2 ON BREAK", color: "red" }, // 8:30 - 8:45
+            { start: 1005, end: 1020, status: "H2 ON BREAK", color: "red" }, // 4:45 - 5:00
+            { start: 1155, end: 1170, status: "H2 ON BREAK", color: "red" }, // 7:15 - 7:30
+            { start: 1215, end: 1230, status: "H2 ON BREAK", color: "red" }, // 8:15 - 8:30
+            { start: 1275, end: 1290, status: "H2 ON BREAK", color: "red" }, // 9:15 - 9:30
+            { start: 1320, end: 1335, status: "H2 ON BREAK", color: "red" }, // 10:00 - 10:15
 
             // Define "On Dinner Break" block (Purple)
-            { start: 960, end: 1005, status: "H2 ON DINNER BREAK", color: "purple" }, // 4:00 - 4:45
+            { start: 1065, end: 1110, status: "H2 ON DINNER BREAK", color: "purple" }, // 5:45 - 6:30
         ];
 
         function updateStatus() {
@@ -81,8 +81,8 @@
 
             let currentStatus = { status: "H2 CLOSED", color: "blue" };
             let nextChangeTime = new Date(now);
-            const openTimeStartToday = 855; // 2:15 PM
-            const closeTimeEndToday = 1290; // 9:30 PM
+            const openTimeStartToday = 960; // 4:00 PM
+            const closeTimeEndToday = 1375; // 10:55 PM
 
             // 1. Check if we are within any specific scheduled time slot
             for (const slot of schedule) {
@@ -99,12 +99,12 @@
             // 2. If we are "H2 CLOSED" (default status is maintained), find the next boundary
             if (currentStatus.status === "H2 CLOSED") {
                 if (currentTimeMinutes < openTimeStartToday) {
-                    // It is before 2:15 PM today, next change is 2:15 PM today
-                    nextChangeTime.setHours(14, 15, 0, 0);
+                    // It is before 4:00 PM today, next change is 4:00 PM today
+                    nextChangeTime.setHours(16, 0, 0, 0);
                 } else if (currentTimeMinutes >= closeTimeEndToday) {
-                    // It is after 9:30 PM today, next change is 2:15 PM tomorrow
+                    // It is after 9:30 PM today, next change is 4:00 PM tomorrow
                     nextChangeTime.setDate(now.getDate() + 1);
-                    nextChangeTime.setHours(14, 15, 0, 0);
+                    nextChangeTime.setHours(16, 0, 0, 0);
                 }
                 // Note: The loop above handles cases where a time is technically "between" valid slots during operating hours but doesn't exist in our defined blocks (which shouldn't happen with the current comprehensive schedule)
             }
